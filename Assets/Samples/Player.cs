@@ -53,6 +53,15 @@ public partial class @Player: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Button"",
+                    ""id"": ""db243d56-2c8d-4459-b4e1-496a166f27f2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -154,6 +163,28 @@ public partial class @Player: IInputActionCollection2, IDisposable
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""df96cf7b-1cc7-42ae-ac63-49506af0f01d"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aa40c129-e794-4817-b543-13a2a5e929af"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -165,6 +196,7 @@ public partial class @Player: IInputActionCollection2, IDisposable
         m_PlayerMain_Move = m_PlayerMain.FindAction("Move", throwIfNotFound: true);
         m_PlayerMain_Jump = m_PlayerMain.FindAction("Jump", throwIfNotFound: true);
         m_PlayerMain_Look = m_PlayerMain.FindAction("Look", throwIfNotFound: true);
+        m_PlayerMain_Aim = m_PlayerMain.FindAction("Aim", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -229,6 +261,7 @@ public partial class @Player: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerMain_Move;
     private readonly InputAction m_PlayerMain_Jump;
     private readonly InputAction m_PlayerMain_Look;
+    private readonly InputAction m_PlayerMain_Aim;
     public struct PlayerMainActions
     {
         private @Player m_Wrapper;
@@ -236,6 +269,7 @@ public partial class @Player: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_PlayerMain_Move;
         public InputAction @Jump => m_Wrapper.m_PlayerMain_Jump;
         public InputAction @Look => m_Wrapper.m_PlayerMain_Look;
+        public InputAction @Aim => m_Wrapper.m_PlayerMain_Aim;
         public InputActionMap Get() { return m_Wrapper.m_PlayerMain; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -254,6 +288,9 @@ public partial class @Player: IInputActionCollection2, IDisposable
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
+            @Aim.started += instance.OnAim;
+            @Aim.performed += instance.OnAim;
+            @Aim.canceled += instance.OnAim;
         }
 
         private void UnregisterCallbacks(IPlayerMainActions instance)
@@ -267,6 +304,9 @@ public partial class @Player: IInputActionCollection2, IDisposable
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
+            @Aim.started -= instance.OnAim;
+            @Aim.performed -= instance.OnAim;
+            @Aim.canceled -= instance.OnAim;
         }
 
         public void RemoveCallbacks(IPlayerMainActions instance)
@@ -289,5 +329,6 @@ public partial class @Player: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
+        void OnAim(InputAction.CallbackContext context);
     }
 }

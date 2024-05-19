@@ -28,6 +28,10 @@ public class PlayerController : MonoBehaviour
         playerInput = new Player();
         controller = GetComponent<CharacterController>();
         animator = GetComponentInChildren<Animator>();
+
+        // Register the callback methods for Aim action
+        playerInput.PlayerMain.Aim.started += OnAimStarted;
+        playerInput.PlayerMain.Aim.canceled += OnAimCanceled;
     }
 
     private void OnEnable()
@@ -104,5 +108,17 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool("isIdle", false);
         }
+    }
+
+    private void OnAimStarted(InputAction.CallbackContext context)
+    {
+        animator.SetBool("isDrawingArrow", true);
+        animator.SetBool("isAiming", false);
+    }
+
+    private void OnAimCanceled(InputAction.CallbackContext context)
+    {
+        animator.SetBool("isDrawingArrow", false);
+        animator.SetBool("isAiming", true);
     }
 }
