@@ -8,10 +8,11 @@ using UnityEngine.EventSystems;
 public class PlaceCharacter : NetworkBehaviour
 {
     [SerializeField] private GameObject placementObject;
-    
+    [SerializeField] private float placingHeight;
 
     private bool isPlaced = false;
     private Camera mainCam;
+    
 
 
     public static event Action characterPlaced; 
@@ -87,6 +88,7 @@ public class PlaceCharacter : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     void SpawnPlayerServerRpc(Vector3 positon, Quaternion rotation, ulong callerID)
     {
+        positon.y += placingHeight;
         GameObject character = Instantiate(placementObject, positon, rotation);
 
         NetworkObject characterNetworkObject = character.GetComponent<NetworkObject>();
