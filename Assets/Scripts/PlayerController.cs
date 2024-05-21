@@ -120,26 +120,26 @@ public class PlayerController : MonoBehaviour
 
     private void OnAimStarted(InputAction.CallbackContext context)
     {
-        if (!isAiming)
-        {
-            crosshair.gameObject.SetActive(true);
-            StartCoroutine(HandleAimingSequence());
-        }
+
+
+        crosshair.gameObject.SetActive(true);
+        StartCoroutine(HandleAimingSequence());
+
     }
 
     private void OnShootStarted(InputAction.CallbackContext context)
     {
-        if (isAiming)
-        {
-            crosshair.gameObject.SetActive(false);
-            StartCoroutine(HandleShooting());
-        }
+
+
+        crosshair.gameObject.SetActive(false);
+        StartCoroutine(HandleShooting());
+
     }
     private IEnumerator HandleAimingSequence()
     {
         // Set isDrawingArrow to true and wait for the animation duration
         animator.SetBool("isDrawingArrow", true);
-        yield return new WaitForSeconds(0.23f); // Adjust to the duration of the drawing arrow animation
+        yield return new WaitForSeconds(0.35f); // Adjust to the duration of the drawing arrow animation
 
         // Set isDrawingArrow to false and isAiming to true
         animator.SetBool("isAiming", true);
@@ -155,14 +155,15 @@ public class PlayerController : MonoBehaviour
     private IEnumerator HandleShooting()
     {
         // Set isShooting to true
-        animator.SetBool("isAiming", false);
+
         animator.SetBool("isShooting", true);
 
         // Shoot the arrow
         ShootArrow();
 
         // Wait for the shooting animation duration
-        yield return new WaitForSeconds(0.5f); // Adjust to the duration of the shooting animation
+        yield return new WaitForSeconds(0.25f); // Adjust to the duration of the shooting animation
+        animator.SetBool("isAiming", false);
 
         // Set isShooting to false and isIdle to true
         animator.SetBool("isShooting", false);
