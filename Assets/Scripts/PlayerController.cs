@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private bool groundedPlayer;
     private Animator animator;
     private bool isAiming;
+    private bool isKicking;  // Track if kick animation is playing
 
     [SerializeField]
     private Transform cameraMain;
@@ -38,6 +39,7 @@ public class PlayerController : MonoBehaviour
 
         playerInput.PlayerMain.Aim.started += OnAimStarted;
         playerInput.PlayerMain.Shoot.started += OnShootStarted;
+        playerInput.PlayerMain.Kick.started += OnKickStarted;
     }
 
     private void OnEnable()
@@ -120,21 +122,16 @@ public class PlayerController : MonoBehaviour
 
     private void OnAimStarted(InputAction.CallbackContext context)
     {
-
-
         crosshair.gameObject.SetActive(true);
         StartCoroutine(HandleAimingSequence());
-
     }
 
     private void OnShootStarted(InputAction.CallbackContext context)
     {
-
-
         crosshair.gameObject.SetActive(false);
         StartCoroutine(HandleShooting());
-
     }
+
     private IEnumerator HandleAimingSequence()
     {
         // Set isDrawingArrow to true and wait for the animation duration
@@ -147,7 +144,6 @@ public class PlayerController : MonoBehaviour
 
         // Show crosshair
 
-
         // Set isAiming to true
         isAiming = true;
     }
@@ -155,7 +151,6 @@ public class PlayerController : MonoBehaviour
     private IEnumerator HandleShooting()
     {
         // Set isShooting to true
-
         animator.SetBool("isShooting", true);
 
         // Shoot the arrow
@@ -182,8 +177,33 @@ public class PlayerController : MonoBehaviour
         // You can add additional logic here to adjust the arrow's direction if needed
     }
 
+    private void OnKickStarted(InputAction.CallbackContext context)
+    {
 
+
+        if (!isKicking)
+        {
+            isKicking = true;
+            StartCoroutine(HandleKicking());
+        }
+
+    }
+
+    private IEnumerator HandleKicking()
+    {
+        animator.SetBool("isIdle", false);
+        animator.SetBool("isKicking", true);
+
+        // Wait for the kick animation duration
+        yield return new WaitForSeconds(0.8f);
+
+        animator.SetBool("isKicking", false);
+        animator.SetBool("isIdle", true);
+
+        isKicking = false;  // Reset isKicking state
+    }
 }
+
 
 /*
 private void OnAimStarted(InputAction.CallbackContext context)
