@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -26,6 +27,8 @@ public class PlayerController : MonoBehaviour
     private GameObject arrowPrefab;  // Prefab for the arrow
     [SerializeField]
     private Transform arrowSpawnPoint;  // Position to instantiate the arrow
+    [SerializeField]
+    private RawImage crosshair;  // UI element for the crosshair
 
     private void Awake()
     {
@@ -34,6 +37,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
 
         playerInput.PlayerMain.Aim.started += OnAimStarted;
+        playerInput.PlayerMain.Shoot.started += OnShootStarted;
     }
 
     private void OnEnable()
@@ -50,6 +54,7 @@ public class PlayerController : MonoBehaviour
     {
         cameraMain = Camera.main.transform;
         child = transform.GetChild(0).transform;
+        crosshair.gameObject.SetActive(false);  // Ensure the crosshair is initially hidden
     }
 
     void Update()
@@ -117,6 +122,73 @@ public class PlayerController : MonoBehaviour
     {
         if (!isAiming)
         {
+            crosshair.gameObject.SetActive(true);
+            StartCoroutine(HandleAimingSequence());
+        }
+    }
+
+    private void OnShootStarted(InputAction.CallbackContext context)
+    {
+        if (isAiming)
+        {
+            crosshair.gameObject.SetActive(false);
+            StartCoroutine(HandleShooting());
+        }
+    }
+    private IEnumerator HandleAimingSequence()
+    {
+        // Set isDrawingArrow to true and wait for the animation duration
+        animator.SetBool("isDrawingArrow", true);
+        yield return new WaitForSeconds(0.23f); // Adjust to the duration of the drawing arrow animation
+
+        // Set isDrawingArrow to false and isAiming to true
+        animator.SetBool("isAiming", true);
+        animator.SetBool("isDrawingArrow", false);
+
+        // Show crosshair
+
+
+        // Set isAiming to true
+        isAiming = true;
+    }
+
+    private IEnumerator HandleShooting()
+    {
+        // Set isShooting to true
+        animator.SetBool("isAiming", false);
+        animator.SetBool("isShooting", true);
+
+        // Shoot the arrow
+        ShootArrow();
+
+        // Wait for the shooting animation duration
+        yield return new WaitForSeconds(0.5f); // Adjust to the duration of the shooting animation
+
+        // Set isShooting to false and isIdle to true
+        animator.SetBool("isShooting", false);
+        animator.SetBool("isIdle", true);
+
+        // Reset aiming state
+        isAiming = false;
+    }
+
+    private void ShootArrow()
+    {
+        GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation);
+        Rigidbody rb = arrow.GetComponent<Rigidbody>();
+        rb.velocity = cameraMain.forward * 20f;  // Set arrow speed
+
+        // You can add additional logic here to adjust the arrow's direction if needed
+    }
+
+
+}
+
+/*
+private void OnAimStarted(InputAction.CallbackContext context)
+    {
+        if (!isAiming)
+        {
             isAiming = true;
             StartCoroutine(HandleAimingSequence());
         }
@@ -153,42 +225,5 @@ public class PlayerController : MonoBehaviour
         // Reset aiming state
         isAiming = false;
     }
+*/
 
-    private void ShootArrow()
-    {
-        GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation);
-        Rigidbody rb = arrow.GetComponent<Rigidbody>();
-
-        // Find the closest enemy with the "Enemy" tag
-        GameObject closestEnemy = FindClosestEnemy();
-        if (closestEnemy != null)
-        {
-            Vector3 direction = (closestEnemy.transform.position - arrowSpawnPoint.position).normalized;
-            rb.velocity = direction * 20f;  // Set arrow speed
-        }
-        else
-        {
-            rb.velocity = cameraMain.forward * 20f;  // Default arrow direction if no enemy found
-        }
-    }
-
-    private GameObject FindClosestEnemy()
-    {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        GameObject closest = null;
-        float minDistance = Mathf.Infinity;
-        Vector3 currentPosition = transform.position;
-
-        foreach (GameObject enemy in enemies)
-        {
-            float distance = Vector3.Distance(enemy.transform.position, currentPosition);
-            if (distance < minDistance)
-            {
-                closest = enemy;
-                minDistance = distance;
-            }
-        }
-
-        return closest;
-    }
-}
