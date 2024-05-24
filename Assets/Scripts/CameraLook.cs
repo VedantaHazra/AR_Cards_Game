@@ -1,41 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
-using Cinemachine;
 using UnityEngine;
 
-[RequireComponent(typeof(CinemachineFreeLook))]
-public class CameraLook : MonoBehaviour
+public class CameraFollow : MonoBehaviour
 {
     [SerializeField]
-    private float lookSpeed = 1;
-    private CinemachineFreeLook cinemachine;
-    private Player playerInput;
-    private CharacterController controller;
-    private void Awake()
-    {
-        playerInput = new Player();
-        cinemachine = GetComponent<CinemachineFreeLook>();
-    }
-    private void OnEnable()
-    {
-        playerInput.Enable();
-    }
-    private void OnDisable()
-    {
-        playerInput.Disable();
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
+    private Transform playerTransform;
+    [SerializeField]
+    private Vector3 offset;
+    [SerializeField]
+    private float smoothSpeed = 0.125f;
 
-    }
-
-    // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        Vector2 delta = playerInput.PlayerMain.Look.ReadValue<Vector2>();
+        Vector3 desiredPosition = playerTransform.position + offset;
+        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
+        transform.position = smoothedPosition;
 
-        cinemachine.m_XAxis.Value += delta.x * 200 * lookSpeed * Time.deltaTime;
-        cinemachine.m_YAxis.Value -= delta.y * lookSpeed * Time.deltaTime;
+        transform.LookAt(playerTransform);
     }
 }
