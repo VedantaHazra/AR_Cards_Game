@@ -49,6 +49,15 @@ public class NetworkPlayerMovement : NetworkBehaviour
             isOwner = false;
         }
     }
+    public override void OnNetworkDespawn()
+    {
+        if(IsOwner)
+        {
+        playerInput.PlayerMain.Aim.started -= OnAimStarted;
+        playerInput.PlayerMain.Shoot.started -= OnShootStarted;
+        playerInput.PlayerMain.Kick.started -= OnKickStarted;
+        }
+    }
     private void Awake()
     {
         playerInput = new Player();
