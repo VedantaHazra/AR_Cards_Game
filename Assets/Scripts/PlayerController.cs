@@ -30,9 +30,25 @@ public class PlayerController : MonoBehaviour
     private Transform arrowSpawnPoint;  // Position to instantiate the arrow
     [SerializeField]
     private RawImage crosshair;  // UI element for the crosshair
+    private bool isOwner;
 
-    [SerializeField]
-    CardHandler cardHandler;
+    public override void OnNetworkSpawn()
+    {
+
+        if (IsOwner)
+        {
+            Debug.Log(IsOwner);
+            isOwner = true;
+
+            playerInput.PlayerMain.Aim.started += OnAimStarted;
+            playerInput.PlayerMain.Shoot.started += OnShootStarted;
+            playerInput.PlayerMain.Kick.started += OnKickStarted;
+        }
+        else
+        {
+            isOwner = false;
+        }
+    }
     private void Awake()
     {
         playerInput = new Player();
@@ -150,8 +166,6 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isAiming", true);
         animator.SetBool("isDrawingArrow", false);
 
-        // Show crosshair
-
         // Set isAiming to true
         isAiming = true;
     }
@@ -187,14 +201,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnKickStarted(InputAction.CallbackContext context)
     {
-
-
         if (!isKicking)
         {
             isKicking = true;
             StartCoroutine(HandleKicking());
         }
-
     }
 
     private IEnumerator HandleKicking()
