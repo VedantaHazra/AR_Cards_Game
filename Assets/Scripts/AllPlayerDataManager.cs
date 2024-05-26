@@ -10,7 +10,7 @@ public class AllPlayerDataManager : NetworkBehaviour
     public static AllPlayerDataManager Instance;
 
     private NetworkList<PlayerData> allPlayerData;
-    private const int LIFEPOINTS = 4;
+    private const int LIFEPOINTS = 5;
     private const int LIFEPOINTS_TO_REDUCE = 1;
 
     public event Action<ulong> OnPlayerDead;
@@ -73,7 +73,7 @@ public class AllPlayerDataManager : NetworkBehaviour
     {
         NetworkManager.Singleton.OnClientConnectedCallback += AddNewClientToList;
         // BulletData.OnHitPlayer += BulletDataOnOnHitPlayer;
-        // KillPlayer.OnKillPlayer += KillPlayerOnOnKillPlayer;
+        KillPlayer.OnKillPlayer += KillPlayerOnOnKillPlayer;
         // RestartGame.OnRestartGame += RestartGameOnOnRestartGame;
     }
 
