@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Scripts/PlayerController.cs.meta
-guid: 5333de1c644fe4966a6e5c7566a67db2
-========
-guid: 0a38c3c42d708419c87fe7c01a5ccfc3
->>>>>>>> main:Assets/Scripts/PlayerHandleHealthUI.cs.meta
+guid: a56ec20e3f1be481ab1668957d5d96ba
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
