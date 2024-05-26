@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -28,8 +27,6 @@ public class PlayerController : MonoBehaviour
     private GameObject arrowPrefab;  // Prefab for the arrow
     [SerializeField]
     private Transform arrowSpawnPoint;  // Position to instantiate the arrow
-    [SerializeField]
-    private RawImage crosshair;  // UI element for the crosshair
 
     private void Awake()
     {
@@ -56,7 +53,6 @@ public class PlayerController : MonoBehaviour
     {
         cameraMain = Camera.main.transform;
         child = transform.GetChild(0).transform;
-        crosshair.gameObject.SetActive(false);  // Ensure the crosshair is initially hidden
     }
 
     void Update()
@@ -73,6 +69,11 @@ public class PlayerController : MonoBehaviour
 
         Vector3 move = cameraMain.forward * movementInput.y + cameraMain.right * movementInput.x;
         move.y = 0f;
+
+        if (isAiming)
+        {
+            move *= 0.5f;  // Reduce speed when aiming
+        }
 
         controller.Move(move * Time.deltaTime * playerSpeed);
 
@@ -122,14 +123,16 @@ public class PlayerController : MonoBehaviour
 
     private void OnAimStarted(InputAction.CallbackContext context)
     {
-        crosshair.gameObject.SetActive(true);
+        isAiming = true;
         StartCoroutine(HandleAimingSequence());
     }
 
     private void OnShootStarted(InputAction.CallbackContext context)
     {
-        crosshair.gameObject.SetActive(false);
-        StartCoroutine(HandleShooting());
+        if (isAiming)
+        {
+            StartCoroutine(HandleShooting());
+        }
     }
 
     private IEnumerator HandleAimingSequence()
@@ -141,9 +144,6 @@ public class PlayerController : MonoBehaviour
         // Set isDrawingArrow to false and isAiming to true
         animator.SetBool("isAiming", true);
         animator.SetBool("isDrawingArrow", false);
-
-        // Set isAiming to true
-        isAiming = true;
     }
 
     private IEnumerator HandleShooting()
@@ -170,7 +170,7 @@ public class PlayerController : MonoBehaviour
     {
         GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation);
         Rigidbody rb = arrow.GetComponent<Rigidbody>();
-        rb.velocity = cameraMain.forward * 20f;  // Set arrow speed
+        rb.velocity = transform.forward * 20f;  // Set arrow speed in the direction the player is facing
 
         // You can add additional logic here to adjust the arrow's direction if needed
     }
@@ -198,6 +198,7 @@ public class PlayerController : MonoBehaviour
         isKicking = false;  // Reset isKicking state
     }
 }
+
 
 
 /*

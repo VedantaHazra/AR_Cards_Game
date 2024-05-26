@@ -12,6 +12,8 @@ public class ThorController : MonoBehaviour
     private bool groundedPlayer;
     private Animator animator;
     private bool isAttacking;  // Track if attack animation is playing
+    private bool isAttackingShort;  // Track if attack animation is playing
+
 
     [SerializeField]
     private Transform cameraMain;
@@ -31,6 +33,7 @@ public class ThorController : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
 
         playerInput.ThorMain.Attack.started += OnAttackStarted;
+        playerInput.ThorMain.Shoot.started += OnShootStarted;
     }
 
     private void OnEnable()
@@ -138,4 +141,33 @@ public class ThorController : MonoBehaviour
         animator.SetBool("isIdle", true);
         isAttacking = false;
     }
+    private void OnShootStarted(InputAction.CallbackContext context)
+    {
+        if (!isAttackingShort)
+        {
+            isAttackingShort = true;
+            StartCoroutine(HandleShortAttackSequence());
+
+
+
+
+        }
+    }
+    private IEnumerator HandleShortAttackSequence()
+    {
+        animator.SetBool("isIdle", false);
+
+        animator.SetBool("isAttackingShort", true);
+        yield return new WaitForSeconds(2.15f);
+
+        animator.SetBool("isAttackingShort", false);
+        animator.SetBool("isIdle", true);
+
+
+        isAttackingShort = false;
+
+
+
+    }
+
 }
