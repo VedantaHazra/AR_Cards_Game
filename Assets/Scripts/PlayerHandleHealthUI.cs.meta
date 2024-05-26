@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scripts/PlayerController.cs.meta
+guid: 39b47efe4518b46f3b3f8c1b5611c2af
+========
+guid: 0a38c3c42d708419c87fe7c01a5ccfc3
+>>>>>>>> main:Assets/Scripts/PlayerHandleHealthUI.cs.meta
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -10,7 +10,7 @@ public class AllPlayerDataManager : NetworkBehaviour
     public static AllPlayerDataManager Instance;
 
     private NetworkList<PlayerData> allPlayerData;
-    private const int LIFEPOINTS = 4;
+    private const int LIFEPOINTS = 5;
     private const int LIFEPOINTS_TO_REDUCE = 1;
 
     public event Action<ulong> OnPlayerDead;
@@ -73,42 +73,42 @@ public class AllPlayerDataManager : NetworkBehaviour
     {
         NetworkManager.Singleton.OnClientConnectedCallback += AddNewClientToList;
         // BulletData.OnHitPlayer += BulletDataOnOnHitPlayer;
-        // KillPlayer.OnKillPlayer += KillPlayerOnOnKillPlayer;
-        // RestartGame.OnRestartGame += RestartGameOnOnRestartGame;
+        KillPlayer.OnKillPlayer += KillPlayerOnOnKillPlayer;
+        RestartGame.OnRestartGame += RestartGameOnOnRestartGame;
     }
 
     public override void OnNetworkDespawn()
     {
         NetworkManager.Singleton.OnClientConnectedCallback -= AddNewClientToList;
         // BulletData.OnHitPlayer -= BulletDataOnOnHitPlayer;
-        // KillPlayer.OnKillPlayer -= KillPlayerOnOnKillPlayer;
-        // RestartGame.OnRestartGame -= RestartGameOnOnRestartGame;
+        KillPlayer.OnKillPlayer -= KillPlayerOnOnKillPlayer;
+        RestartGame.OnRestartGame -= RestartGameOnOnRestartGame;
     }
 
 
     private void RestartGameOnOnRestartGame()
     {
-        // if(!IsServer) return;
+        if(!IsServer) return;
 
-        // List<NetworkObject> playerObjects = FindObjectsOfType<PlayerMovement>()
-        //     .Select(x => x.transform.GetComponent<NetworkObject>()).ToList();
+        List<NetworkObject> playerObjects = FindObjectsOfType<NetworkPlayerMovement>()
+            .Select(x => x.transform.GetComponent<NetworkObject>()).ToList();
 
-        // List<NetworkObject> bulletObjects = FindObjectsOfType<BulletData>()
-        //     .Select(x => x.transform.GetComponent<NetworkObject>()).ToList();
+        List<NetworkObject> bulletObjects = FindObjectsOfType<BulletData>()
+            .Select(x => x.transform.GetComponent<NetworkObject>()).ToList();
 
 
 
-        // foreach (var playerobj in playerObjects)
-        // {
-        //    playerobj.Despawn(); 
-        // }
+        foreach (var playerobj in playerObjects)
+        {
+           playerobj.Despawn(); 
+        }
 
         // foreach (var bulletObject in bulletObjects)
         // {
         //     bulletObject.Despawn();
         // }
 
-        // ResetNetworkList();
+        ResetNetworkList();
     }
 
 

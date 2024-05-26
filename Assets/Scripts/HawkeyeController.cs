@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 public class HawkeyeController : MonoBehaviour
 {
@@ -12,6 +11,7 @@ public class HawkeyeController : MonoBehaviour
     private bool groundedPlayer;
     private Animator animator;
     private bool isAiming;
+    private bool isAimWalking;
     private bool isKicking;  // Track if kick animation is playing
 
     [SerializeField]
@@ -28,8 +28,6 @@ public class HawkeyeController : MonoBehaviour
     private GameObject arrowPrefab;  // Prefab for the arrow
     [SerializeField]
     private Transform arrowSpawnPoint;  // Position to instantiate the arrow
-    [SerializeField]
-    private RawImage crosshair;  // UI element for the crosshair
 
     private void Awake()
     {
@@ -56,7 +54,6 @@ public class HawkeyeController : MonoBehaviour
     {
         cameraMain = Camera.main.transform;
         child = transform.GetChild(0).transform;
-        crosshair.gameObject.SetActive(false);  // Ensure the crosshair is initially hidden
     }
 
     void Update()
@@ -74,11 +71,30 @@ public class HawkeyeController : MonoBehaviour
         Vector3 move = cameraMain.forward * movementInput.y + cameraMain.right * movementInput.x;
         move.y = 0f;
 
+        if (isAiming)
+        {
+            move *= 0.5f;  // Reduce speed when aiming
+        }
+
         controller.Move(move * Time.deltaTime * playerSpeed);
 
         if (move != Vector3.zero)
         {
             gameObject.transform.forward = move;
+
+            if (isAiming)
+            {
+                isAimWalking = true;
+                animator.SetBool("isAimWalking", true);
+            }
+        }
+        else
+        {
+            if (isAiming)
+            {
+                isAimWalking = false;
+                animator.SetBool("isAimWalking", false);
+            }
         }
 
         if (playerInput.PlayerMain.Jump.WasPressedThisFrame() && groundedPlayer)
@@ -122,14 +138,16 @@ public class HawkeyeController : MonoBehaviour
 
     private void OnAimStarted(InputAction.CallbackContext context)
     {
-        crosshair.gameObject.SetActive(true);
+        isAiming = true;
         StartCoroutine(HandleAimingSequence());
     }
 
     private void OnShootStarted(InputAction.CallbackContext context)
     {
-        crosshair.gameObject.SetActive(false);
-        StartCoroutine(HandleShooting());
+        if (isAiming)
+        {
+            StartCoroutine(HandleShooting());
+        }
     }
 
     private IEnumerator HandleAimingSequence()
@@ -141,9 +159,6 @@ public class HawkeyeController : MonoBehaviour
         // Set isDrawingArrow to false and isAiming to true
         animator.SetBool("isAiming", true);
         animator.SetBool("isDrawingArrow", false);
-
-        // Set isAiming to true
-        isAiming = true;
     }
 
     private IEnumerator HandleShooting()
@@ -164,13 +179,15 @@ public class HawkeyeController : MonoBehaviour
 
         // Reset aiming state
         isAiming = false;
+        isAimWalking = false;
+        animator.SetBool("isAimWalking", false);
     }
 
     private void ShootArrow()
     {
         GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation);
         Rigidbody rb = arrow.GetComponent<Rigidbody>();
-        rb.velocity = cameraMain.forward * 20f;  // Set arrow speed
+        rb.velocity = transform.forward * 20f;  // Set arrow speed in the direction the player is facing
 
         // You can add additional logic here to adjust the arrow's direction if needed
     }
@@ -198,7 +215,6 @@ public class HawkeyeController : MonoBehaviour
         isKicking = false;  // Reset isKicking state
     }
 }
-
 
 /*
 private void OnAimStarted(InputAction.CallbackContext context)
