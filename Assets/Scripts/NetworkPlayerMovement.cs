@@ -216,6 +216,11 @@ public class NetworkPlayerMovement : NetworkBehaviour
 
     private void ShootArrow()
     {
+        NetworkObject arrowNetworkObject = arrow.GetComponent<NetworkObject>();
+        
+        arrowNetworkObject.Spawn();
+        arrow.GetComponent<ArrowScript>().SetOwnershipServerRpc(NetworkManager.Singleton.LocalClientId);
+
         ArrowScript arrowScript = arrow.GetComponent<ArrowScript>();
         arrowScript.Shot(arrowReleasePoint.position - arrowSpawnPoint.position);
         //Rigidbody rb = arrow.GetComponent<Rigidbody>();
