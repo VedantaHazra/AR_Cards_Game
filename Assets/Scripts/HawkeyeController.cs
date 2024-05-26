@@ -2,8 +2,9 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class HawkeyeController : MonoBehaviour
 {
+    private GameObject arrow;
     private Player playerInput;
     private CharacterController controller;
     private Vector3 playerVelocity;
@@ -28,7 +29,8 @@ public class PlayerController : MonoBehaviour
     private GameObject arrowPrefab;  // Prefab for the arrow
     [SerializeField]
     private Transform arrowSpawnPoint;  // Position to instantiate the arrow
-
+    [SerializeField]
+    private Transform arrowReleasePoint;
     private void Awake()
     {
         playerInput = new Player();
@@ -139,6 +141,7 @@ public class PlayerController : MonoBehaviour
     private void OnAimStarted(InputAction.CallbackContext context)
     {
         isAiming = true;
+        arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation, arrowSpawnPoint);
         StartCoroutine(HandleAimingSequence());
     }
 
@@ -163,11 +166,13 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator HandleShooting()
     {
+        ShootArrow();
         // Set isShooting to true
+        yield return new WaitForSeconds(0.3f);
         animator.SetBool("isShooting", true);
 
         // Shoot the arrow
-        ShootArrow();
+        
 
         // Wait for the shooting animation duration
         yield return new WaitForSeconds(0.25f); // Adjust to the duration of the shooting animation
@@ -185,9 +190,10 @@ public class PlayerController : MonoBehaviour
 
     private void ShootArrow()
     {
-        GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation);
-        Rigidbody rb = arrow.GetComponent<Rigidbody>();
-        rb.velocity = transform.forward * 20f;  // Set arrow speed in the direction the player is facing
+        ArrowScript arrowScript = arrow.GetComponent<ArrowScript>();
+        arrowScript.Shot(arrowReleasePoint.position - arrowSpawnPoint.position);
+        //Rigidbody rb = arrow.GetComponent<Rigidbody>();
+        //rb.velocity = transform.forward * 20f;  // Set arrow speed in the direction the player is facing
 
         // You can add additional logic here to adjust the arrow's direction if needed
     }
