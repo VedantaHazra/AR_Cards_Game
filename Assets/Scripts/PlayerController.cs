@@ -1,9 +1,10 @@
 using System.Collections;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
     private Player playerInput;
     private CharacterController controller;
@@ -32,12 +33,15 @@ public class PlayerController : MonoBehaviour
     private RawImage crosshair;  // UI element for the crosshair
     private bool isOwner;
 
+    [SerializeField]
+    CardHandler cardHandler;
+
     public override void OnNetworkSpawn()
     {
 
-        if (IsOwner)
+        if (isOwner)
         {
-            Debug.Log(IsOwner);
+            Debug.Log(isOwner);
             isOwner = true;
 
             playerInput.PlayerMain.Aim.started += OnAimStarted;
