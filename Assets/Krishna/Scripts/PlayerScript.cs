@@ -23,6 +23,9 @@ public class PlayerScript : MonoBehaviour
     bool isGrounded;
     Vector3 velocity;
 
+    //cards
+    public CardHandler cardHandler;
+
     void Start()
     {
         trueSpeed = walkSpeed;
@@ -30,6 +33,12 @@ public class PlayerScript : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         anim = GetComponentInChildren<Animator>();
+
+        cardHandler.addRandomCard();
+        cardHandler.addRandomCard();
+        cardHandler.addRandomCard();
+        cardHandler.addRandomCard();
+        Debug.Log("4 random cards added");
     }
     void Update()
     {

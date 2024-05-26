@@ -140,7 +140,6 @@
 [18:08:12.493000 +05:30] [---W---] [argeo/ardk-next/common/ardk_settings/ardk_settings_manager.cc:SetFromFile:52] [thread 2209759] Failed to read the feature flag file/Users/onepiece/Documents/ML/Course/AR_Cards_Game/Assets/StreamingAssets/featureFlag.json
 [18:08:56.137944 +05:30] [---D---] [argeo/ardk-next/core/components/component_factory_collection.cc:ComponentFactoryCollection:37] [thread 2209759] api_key:8kDBuWn5IrnTvOxWWHkVOoDv1GNwKGeE3FNiMhJqAwAF0oUlqN5LtW2FEhhmcajaJqmP8g
 [18:08:56.138129 +05:30] [---W---] [argeo/ardk-next/common/ardk_settings/ardk_settings_manager.cc:SetFromFile:52] [thread 2209759] Failed to read the feature flag file/Users/onepiece/Documents/ML/Course/AR_Cards_Game/Assets/StreamingAssets/featureFlag.json
-<<<<<<< HEAD
 [18:53:43.295131 +05:30] [---D---] [argeo/ardk-next/core/components/component_factory_collection.cc:ComponentFactoryCollection:37] [thread 24098726] api_key:8kDBuWn5IrnTvOxWWHkVOoDv1GNwKGeE3FNiMhJqAwAF0oUlqN5LtW2FEhhmcajaJqmP8g
 [18:53:43.297063 +05:30] [---W---] [argeo/ardk-next/common/ardk_settings/ardk_settings_manager.cc:SetFromFile:52] [thread 24098726] Failed to read the feature flag file/Users/vedantahazra/AR_Cards_Game/Assets/StreamingAssets/featureFlag.json
 [18:55:20.485996 +05:30] [---D---] [argeo/ardk-next/core/components/component_factory_collection.cc:ComponentFactoryCollection:37] [thread 24098726] api_key:8kDBuWn5IrnTvOxWWHkVOoDv1GNwKGeE3FNiMhJqAwAF0oUlqN5LtW2FEhhmcajaJqmP8g
@@ -269,6 +268,8 @@
 [04:53:37.263226 +05:30] [---W---] [argeo/ardk-next/common/ardk_settings/ardk_settings_manager.cc:SetFromFile:52] [thread 2209759] Failed to read the feature flag file/Users/onepiece/Documents/ML/Course/AR_Cards_Game/Assets/StreamingAssets/featureFlag.json
 [04:53:58.359971 +05:30] [---D---] [argeo/ardk-next/core/components/component_factory_collection.cc:ComponentFactoryCollection:37] [thread 2209759] api_key:8kDBuWn5IrnTvOxWWHkVOoDv1GNwKGeE3FNiMhJqAwAF0oUlqN5LtW2FEhhmcajaJqmP8g
 [04:53:58.360146 +05:30] [---W---] [argeo/ardk-next/common/ardk_settings/ardk_settings_manager.cc:SetFromFile:52] [thread 2209759] Failed to read the feature flag file/Users/onepiece/Documents/ML/Course/AR_Cards_Game/Assets/StreamingAssets/featureFlag.json
+<<<<<<< HEAD
+=======
 <<<<<<< Updated upstream
 =======
 >>>>>>> parent of 7b95326 (player added to network)
@@ -418,3 +419,4 @@
 [20:07:50.100962 +05:30] [---W---] [argeo/ardk-next/common/ardk_settings/ardk_settings_manager.cc:SetFromFile:52] [thread 226708] Failed to read the feature flag file/Users/onepiece/Documents/ML/Course/AR_Cards_Game/Assets/StreamingAssets/featureFlag.json
 [20:08:45.332942 +05:30] [---D---] [argeo/ardk-next/core/components/component_factory_collection.cc:ComponentFactoryCollection:37] [thread 226708] api_key:8kDBuWn5IrnTvOxWWHkVOoDv1GNwKGeE3FNiMhJqAwAF0oUlqN5LtW2FEhhmcajaJqmP8g
 [20:08:45.333197 +05:30] [---W---] [argeo/ardk-next/common/ardk_settings/ardk_settings_manager.cc:SetFromFile:52] [thread 226708] Failed to read the feature flag file/Users/onepiece/Documents/ML/Course/AR_Cards_Game/Assets/StreamingAssets/featureFlag.json
+>>>>>>> main

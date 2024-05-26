@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class HawkeyeController : MonoBehaviour
 {
     private Player playerInput;
     private CharacterController controller;
