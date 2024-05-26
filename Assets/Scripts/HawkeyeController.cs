@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private bool groundedPlayer;
     private Animator animator;
     private bool isAiming;
+    private bool isAimWalking;
     private bool isKicking;  // Track if kick animation is playing
 
     [SerializeField]
@@ -80,6 +81,20 @@ public class PlayerController : MonoBehaviour
         if (move != Vector3.zero)
         {
             gameObject.transform.forward = move;
+
+            if (isAiming)
+            {
+                isAimWalking = true;
+                animator.SetBool("isAimWalking", true);
+            }
+        }
+        else
+        {
+            if (isAiming)
+            {
+                isAimWalking = false;
+                animator.SetBool("isAimWalking", false);
+            }
         }
 
         if (playerInput.PlayerMain.Jump.WasPressedThisFrame() && groundedPlayer)
@@ -164,6 +179,8 @@ public class PlayerController : MonoBehaviour
 
         // Reset aiming state
         isAiming = false;
+        isAimWalking = false;
+        animator.SetBool("isAimWalking", false);
     }
 
     private void ShootArrow()
@@ -198,8 +215,6 @@ public class PlayerController : MonoBehaviour
         isKicking = false;  // Reset isKicking state
     }
 }
-
-
 
 /*
 private void OnAimStarted(InputAction.CallbackContext context)
