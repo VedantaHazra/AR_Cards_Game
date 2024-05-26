@@ -1,0 +1,13 @@
+npx thirdweb create contract
+package.json
+{
+    "dependencies": {
+      "react": "18.2.0",
+      "react-native": "0.74.1",
+      "thirdweb": "5.24.0" 
+    }
+
+  }
+
+cd <> 
+npx thirdweb deploy  
