@@ -6,6 +6,7 @@ using Unity.Netcode;
 
 public class NetworkPlayerMovement : NetworkBehaviour
 {
+   private GameObject arrow;
     private Player playerInput;
     private CharacterController controller;
     private Vector3 playerVelocity;
@@ -13,6 +14,7 @@ public class NetworkPlayerMovement : NetworkBehaviour
     private bool groundedPlayer;
     private Animator animator;
     private bool isAiming;
+    private bool isAimWalking;
     private bool isKicking;  // Track if kick animation is playing
 
     [SerializeField]
@@ -30,7 +32,7 @@ public class NetworkPlayerMovement : NetworkBehaviour
     [SerializeField]
     private Transform arrowSpawnPoint;  // Position to instantiate the arrow
     [SerializeField]
-    private RawImage crosshair;  // UI element for the crosshair
+    private Transform arrowReleasePoint;
     private bool isOwner;
 
     public override void OnNetworkSpawn()
@@ -66,7 +68,7 @@ public class NetworkPlayerMovement : NetworkBehaviour
 
     }
 
-    private void OnEnable()
+   private void OnEnable()
     {
         playerInput.Enable();
     }
@@ -80,12 +82,10 @@ public class NetworkPlayerMovement : NetworkBehaviour
     {
         cameraMain = Camera.main.transform;
         child = transform.GetChild(0).transform;
-        crosshair.gameObject.SetActive(false);  // Ensure the crosshair is initially hidden
     }
 
     void Update()
     {
-        if(!isOwner){ return; }
         groundedPlayer = controller.isGrounded;
 
         if (groundedPlayer && playerVelocity.y < 0)
@@ -99,11 +99,30 @@ public class NetworkPlayerMovement : NetworkBehaviour
         Vector3 move = cameraMain.forward * movementInput.y + cameraMain.right * movementInput.x;
         move.y = 0f;
 
+        if (isAiming)
+        {
+            move *= 0.5f;  // Reduce speed when aiming
+        }
+
         controller.Move(move * Time.deltaTime * playerSpeed);
 
         if (move != Vector3.zero)
         {
             gameObject.transform.forward = move;
+
+            if (isAiming)
+            {
+                isAimWalking = true;
+                animator.SetBool("isAimWalking", true);
+            }
+        }
+        else
+        {
+            if (isAiming)
+            {
+                isAimWalking = false;
+                animator.SetBool("isAimWalking", false);
+            }
         }
 
         if (playerInput.PlayerMain.Jump.WasPressedThisFrame() && groundedPlayer)
@@ -147,14 +166,17 @@ public class NetworkPlayerMovement : NetworkBehaviour
 
     private void OnAimStarted(InputAction.CallbackContext context)
     {
-        crosshair.gameObject.SetActive(true);
+        isAiming = true;
+        arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation, arrowSpawnPoint);
         StartCoroutine(HandleAimingSequence());
     }
 
     private void OnShootStarted(InputAction.CallbackContext context)
     {
-        crosshair.gameObject.SetActive(false);
-        StartCoroutine(HandleShooting());
+        if (isAiming)
+        {
+            StartCoroutine(HandleShooting());
+        }
     }
 
     private IEnumerator HandleAimingSequence()
@@ -166,20 +188,17 @@ public class NetworkPlayerMovement : NetworkBehaviour
         // Set isDrawingArrow to false and isAiming to true
         animator.SetBool("isAiming", true);
         animator.SetBool("isDrawingArrow", false);
-
-        // Show crosshair
-
-        // Set isAiming to true
-        isAiming = true;
     }
 
     private IEnumerator HandleShooting()
     {
+        ShootArrow();
         // Set isShooting to true
+        yield return new WaitForSeconds(0.3f);
         animator.SetBool("isShooting", true);
 
         // Shoot the arrow
-        ShootArrow();
+        
 
         // Wait for the shooting animation duration
         yield return new WaitForSeconds(0.25f); // Adjust to the duration of the shooting animation
@@ -191,27 +210,27 @@ public class NetworkPlayerMovement : NetworkBehaviour
 
         // Reset aiming state
         isAiming = false;
+        isAimWalking = false;
+        animator.SetBool("isAimWalking", false);
     }
 
     private void ShootArrow()
     {
-        GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation);
-        Rigidbody rb = arrow.GetComponent<Rigidbody>();
-        rb.velocity = cameraMain.forward * 20f;  // Set arrow speed
+        ArrowScript arrowScript = arrow.GetComponent<ArrowScript>();
+        arrowScript.Shot(arrowReleasePoint.position - arrowSpawnPoint.position);
+        //Rigidbody rb = arrow.GetComponent<Rigidbody>();
+        //rb.velocity = transform.forward * 20f;  // Set arrow speed in the direction the player is facing
 
         // You can add additional logic here to adjust the arrow's direction if needed
     }
 
     private void OnKickStarted(InputAction.CallbackContext context)
     {
-
-
         if (!isKicking)
         {
             isKicking = true;
             StartCoroutine(HandleKicking());
         }
-
     }
 
     private IEnumerator HandleKicking()
@@ -228,7 +247,6 @@ public class NetworkPlayerMovement : NetworkBehaviour
         isKicking = false;  // Reset isKicking state
     }
 }
-
 
 /*
 private void OnAimStarted(InputAction.CallbackContext context)
