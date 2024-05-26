@@ -31,6 +31,11 @@ public class HawkeyeController : MonoBehaviour
     private Transform arrowSpawnPoint;  // Position to instantiate the arrow
     [SerializeField]
     private Transform arrowReleasePoint;
+
+    [SerializeField]
+    private cardScript LongcardScript; // Reference to cardScript
+    [SerializeField]
+    private cardScript ShortcardScript; // Reference to cardScript
     private void Awake()
     {
         playerInput = new Player();
@@ -172,7 +177,7 @@ public class HawkeyeController : MonoBehaviour
         animator.SetBool("isShooting", true);
 
         // Shoot the arrow
-        
+
 
         // Wait for the shooting animation duration
         yield return new WaitForSeconds(0.25f); // Adjust to the duration of the shooting animation
@@ -186,6 +191,8 @@ public class HawkeyeController : MonoBehaviour
         isAiming = false;
         isAimWalking = false;
         animator.SetBool("isAimWalking", false);
+        LongcardScript.useCard(); // Call useCard() method
+
     }
 
     private void ShootArrow()
@@ -219,6 +226,8 @@ public class HawkeyeController : MonoBehaviour
         animator.SetBool("isIdle", true);
 
         isKicking = false;  // Reset isKicking state
+        ShortcardScript.useCard(); // Call useCard() method
+
     }
 }
 
