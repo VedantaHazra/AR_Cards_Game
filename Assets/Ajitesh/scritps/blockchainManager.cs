@@ -67,15 +67,7 @@ public class blockchainManager : MonoBehaviour
         InvokeOnLogIn();
 
     }
-    public async Task TradeCards(string toAddress, int cardIdToTrade, int cardIdWanted)
-    {
-        Debug.Log("trade Cards");
-        var sdk = ThirdwebManager.Instance.SDK;
-        string json = "[{\"type\":\"event\",\"name\":\"Trade\",\"inputs\":[{\"type\":\"address\",\"name\":\"from\",\"indexed\":true,\"internalType\":\"address\"},{\"type\":\"address\",\"name\":\"to\",\"indexed\":true,\"internalType\":\"address\"},{\"type\":\"uint256\",\"name\":\"cardIdGave\",\"indexed\":false,\"internalType\":\"uint256\"},{\"type\":\"uint256\",\"name\":\"cardIdReceived\",\"indexed\":false,\"internalType\":\"uint256\"}],\"outputs\":[],\"anonymous\":false},{\"type\":\"function\",\"name\":\"assignCards\",\"inputs\":[{\"type\":\"address\",\"name\":\"player\",\"internalType\":\"address\"},{\"type\":\"uint256\",\"name\":\"card1\",\"internalType\":\"uint256\"},{\"type\":\"uint256\",\"name\":\"card2\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"cardOwnership\",\"inputs\":[{\"type\":\"address\",\"name\":\"\",\"internalType\":\"address\"},{\"type\":\"uint256\",\"name\":\"\",\"internalType\":\"uint256\"}],\"outputs\":[{\"type\":\"uint256\",\"name\":\"\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"trade\",\"inputs\":[{\"type\":\"address\",\"name\":\"to\",\"internalType\":\"address\"},{\"type\":\"uint256\",\"name\":\"cardIdToTrade\",\"internalType\":\"uint256\"},{\"type\":\"uint256\",\"name\":\"cardIdWanted\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"}]";
-        var contract = sdk.GetContract("0xC5FD7C132C9Aa00be23756aC9046C89a4876c15a", json);
-        var result = await contract.Write("trade", toAddress, cardIdToTrade, cardIdWanted);
-        Debug.Log("Trade successful: " + result);
-    }
+
 
     internal async Task SubmitScore(float distanceTravelled)
     {
@@ -106,11 +98,15 @@ public class blockchainManager : MonoBehaviour
         var contract = sdk.GetContract("0x5881C10a844dbD2d8B5A037c23354286F65C8193");
         var result = await contract.ERC20.ClaimTo(Address, score);
         claimText.text = "Done";
+
+
+
     }
     public void InvokeOnLogIn()
     {
         OnLoggedIn.Invoke(Address);
         GetTokenBalance();
+        TradeCards("0x1cD5a87BBc935739e69E3BcC726e442B104D8210", 3, 1);
     }
 
     public async void GetTokenBalance()
@@ -121,6 +117,7 @@ public class blockchainManager : MonoBehaviour
         var contract = sdk.GetContract("0x5881C10a844dbD2d8B5A037c23354286F65C8193");
         var balance = await contract.ERC20.BalanceOf(Address);
         Balance.text = "balance : " + balance.displayValue;
+
     }
 
 
@@ -134,19 +131,19 @@ public class blockchainManager : MonoBehaviour
     // Function to get the user's wallet address
     public async Task<string> GetUserWalletAddress()
     {
-        var sdk = ThirdwebManager.Instance.SDK;
-        try
-        {
-            var wallet = sdk.Wallet;
-            var address = await wallet.GetAddress();
-            Debug.Log("User Wallet Address: " + address);
-            return address;
-        }
-        catch (System.Exception e)
-        {
-            Debug.Log("Failed to get wallet address: " + e.Message);
-            return null;
-        }
+        // var sdk = ThirdwebManager.Instance.SDK;
+        // try
+        // {
+        //     var wallet = sdk.Wallet;
+        //     var address = await wallet.GetAddress();
+        //     Debug.Log("User Wallet Address: " + address);
+        //     return address;
+        // }
+        // catch (System.Exception e)
+        // {
+        //     Debug.Log("Failed to get wallet address: " + e.Message);
+        return null;
+        // }
     }
 
     // Function to show the cards a user has
@@ -185,6 +182,39 @@ public class blockchainManager : MonoBehaviour
             Debug.Log("Failed to assign cards: " + e.Message);
         }
     }
+
+    public async Task TradeCards(string toAddress, int cardIdToTrade, int cardIdWanted)
+    {
+        Debug.Log("Trade Cards");
+        var sdk = ThirdwebManager.Instance.SDK;
+        string json = "[{\"type\":\"event\",\"name\":\"Trade\",\"inputs\":[{\"type\":\"address\",\"name\":\"from\",\"indexed\":true,\"internalType\":\"address\"},{\"type\":\"address\",\"name\":\"to\",\"indexed\":true,\"internalType\":\"address\"},{\"type\":\"uint256\",\"name\":\"cardIdGave\",\"indexed\":false,\"internalType\":\"uint256\"},{\"type\":\"uint256\",\"name\":\"cardIdReceived\",\"indexed\":false,\"internalType\":\"uint256\"}],\"outputs\":[],\"anonymous\":false},{\"type\":\"function\",\"name\":\"assignCards\",\"inputs\":[{\"type\":\"address\",\"name\":\"player\",\"internalType\":\"address\"},{\"type\":\"uint256\",\"name\":\"card1\",\"internalType\":\"uint256\"},{\"type\":\"uint256\",\"name\":\"card2\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"cardOwnership\",\"inputs\":[{\"type\":\"address\",\"name\":\"\",\"internalType\":\"address\"},{\"type\":\"uint256\",\"name\":\"\",\"internalType\":\"uint256\"}],\"outputs\":[{\"type\":\"uint256\",\"name\":\"\",\"internalType\":\"uint256\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"trade\",\"inputs\":[{\"type\":\"address\",\"name\":\"to\",\"internalType\":\"address\"},{\"type\":\"uint256\",\"name\":\"cardIdToTrade\",\"internalType\":\"uint256\"},{\"type\":\"uint256\",\"name\":\"cardIdWanted\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"}]";
+        var contract = sdk.GetContract("0xC5FD7C132C9Aa00be23756aC9046C89a4876c15a", json);
+
+        Debug.Log("Contract retrieved in TradeCards");
+        try
+        {
+            var balance = await contract.ERC20.BalanceOf(Address);
+            BigInteger balanceValue = BigInteger.Parse(balance.value);
+            BigInteger requiredBalance = new BigInteger(1000); // Set the required balance as per your requirements
+
+            if (balanceValue >= requiredBalance)
+            {
+                var result = await contract.Write("trade", toAddress, cardIdToTrade, cardIdWanted);
+                Debug.Log("Trade successful: " + result);
+            }
+            else
+            {
+                Debug.Log("Insufficient balance for trade");
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.Log("Trade failed: " + e.Message);
+        }
+    }
+
+
+
 
 }
 
