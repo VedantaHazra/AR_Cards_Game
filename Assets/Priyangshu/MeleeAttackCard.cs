@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Org.BouncyCastle.Crypto.Engines;
 using UnityEngine;
 
 [CreateAssetMenu]
@@ -7,6 +8,9 @@ public class MeleeAttackCard : Card
 {
     public int damageRadius;
     public string AttackName;
+
+    public GameObject slash;
+
     // public int speed;
 
     public void Attack()
@@ -28,5 +32,10 @@ public class MeleeAttackCard : Card
     {
         Debug.Log("Melee Card Used");
         // do animations on player
+        this.player = GameObject.Find("Hawkeye");
+        // Debug.Log("Player: " + player);
+        HawkeyeController HC = player.GetComponent<HawkeyeController>();
+        Debug.Log("Player: " + player);
+        HC.slashAttack(slash, damageRadius, damage);
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Card : ScriptableObject
 {
     // public Player player;
-    GameObject player;
+    protected GameObject player;
     public new string name;
     public string type;
     public Sprite artwork;
