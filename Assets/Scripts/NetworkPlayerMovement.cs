@@ -168,6 +168,7 @@ public class NetworkPlayerMovement : NetworkBehaviour
     {
         isAiming = true;
         arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation, arrowSpawnPoint);
+        StartBulletServerRpc(NetworkManager.Singleton.LocalClientId);
         StartCoroutine(HandleAimingSequence());
     }
 
@@ -189,6 +190,7 @@ public class NetworkPlayerMovement : NetworkBehaviour
         animator.SetBool("isAiming", true);
         animator.SetBool("isDrawingArrow", false);
     }
+    
 
     private IEnumerator HandleShooting()
     {
@@ -216,17 +218,24 @@ public class NetworkPlayerMovement : NetworkBehaviour
 
     private void ShootArrow()
     {
-        NetworkObject arrowNetworkObject = arrow.GetComponent<NetworkObject>();
         
-        arrowNetworkObject.Spawn();
-        arrow.GetComponent<ArrowScript>().SetOwnershipServerRpc(NetworkManager.Singleton.LocalClientId);
-
         ArrowScript arrowScript = arrow.GetComponent<ArrowScript>();
         arrowScript.Shot(arrowReleasePoint.position - arrowSpawnPoint.position);
+
+        
         //Rigidbody rb = arrow.GetComponent<Rigidbody>();
         //rb.velocity = transform.forward * 20f;  // Set arrow speed in the direction the player is facing
 
         // You can add additional logic here to adjust the arrow's direction if needed
+    }
+    [ServerRpc(RequireOwnership = false)]
+    void StartBulletServerRpc(ulong clientID)
+    {
+        NetworkObject arrowNetworkObject = arrow.GetComponent<NetworkObject>();
+        
+        arrowNetworkObject.Spawn();
+        arrow.GetComponent<ArrowScript>().SetOwnershipServerRpc(NetworkManager.Singleton.LocalClientId);
+        
     }
 
     private void OnKickStarted(InputAction.CallbackContext context)

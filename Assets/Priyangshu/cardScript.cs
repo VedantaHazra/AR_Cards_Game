@@ -45,6 +45,7 @@ public class cardScript : MonoBehaviour
         Debug.Log(card.type);
         Debug.Log(card.damage);
         Debug.Log(card.cooldownTime);
+        card.useCard();
 
         cooldown();
     }

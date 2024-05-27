@@ -19,6 +19,24 @@ public class ArrowScript : NetworkBehaviour
     public static event Action<(ulong from, ulong to)> OnHitPlayer; 
     private const int MAX_FLY_TIME = 5;
 
+    [SerializeField]
+    private GameObject arrowVFXPrefab;
+    public bool rangedSpecialAttack;
+
+    public float damage;
+    public int range;
+
+    void Awake(){
+        rangedSpecialAttack = false;
+        arrowVFXPrefab.SetActive(false);
+    }
+
+    void Start()
+    {
+        if(rangedSpecialAttack){
+            arrowVFXPrefab.SetActive(true);
+        }
+    }
 
     void Update()
     {

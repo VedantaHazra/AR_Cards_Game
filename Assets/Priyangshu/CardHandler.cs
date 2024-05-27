@@ -21,6 +21,11 @@ public class CardHandler : MonoBehaviour
         width = GetComponent<RectTransform>().rect.width;
         height = GetComponent<RectTransform>().rect.height;
         player = GameObject.Find("Player");
+
+        addRandomCard();
+        addRandomCard();
+        addRandomCard();
+        
     }
 
     // Update is called once per frame
