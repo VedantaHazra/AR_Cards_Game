@@ -20,7 +20,7 @@ public class LoadGameScene : MonoBehaviour
         }
 
 
-        GameObject startGameARObject = FindObjectOfType<StartGameNonAR>().gameObject;
+        GameObject startGameARObject = FindObjectOfType<StartGameAR>().gameObject;
         Destroy(startGameARObject);
         
         Destroy(FindObjectOfType<NetworkManager>().transform.gameObject);
