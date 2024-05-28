@@ -5,6 +5,9 @@ using UnityEngine.InputSystem;
 public class HawkeyeController : MonoBehaviour
 {
     private GameObject arrow;
+
+    float arrowDamage;
+    int arrowRange;
     private Player playerInput;
     private CharacterController controller;
     private Vector3 playerVelocity;
@@ -27,6 +30,9 @@ public class HawkeyeController : MonoBehaviour
     private float rotationSpeed = 4f;
     [SerializeField]
     private GameObject arrowPrefab;  // Prefab for the arrow
+
+    public bool rangedSpecialAttack;
+
     [SerializeField]
     private Transform arrowSpawnPoint;  // Position to instantiate the arrow
     [SerializeField]
@@ -36,6 +42,11 @@ public class HawkeyeController : MonoBehaviour
     private cardScript LongcardScript; // Reference to cardScript
     [SerializeField]
     private cardScript ShortcardScript; // Reference to cardScript
+
+    [SerializeField]
+    Transform slashSpawnPoint;
+
+    // public GameObject slash;
     private void Awake()
     {
         playerInput = new Player();
@@ -45,6 +56,7 @@ public class HawkeyeController : MonoBehaviour
         playerInput.PlayerMain.Aim.started += OnAimStarted;
         playerInput.PlayerMain.Shoot.started += OnShootStarted;
         playerInput.PlayerMain.Kick.started += OnKickStarted;
+        rangedSpecialAttack = false;
     }
 
     private void OnEnable()
@@ -147,6 +159,12 @@ public class HawkeyeController : MonoBehaviour
     {
         isAiming = true;
         arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation, arrowSpawnPoint);
+        if(rangedSpecialAttack){
+            arrow.GetComponent<ArrowScript>().rangedSpecialAttack = true;
+            arrow.GetComponent<ArrowScript>().damage = arrowDamage;
+            arrow.GetComponent<ArrowScript>().range = arrowRange;
+        }
+        rangedSpecialAttack = false;
         StartCoroutine(HandleAimingSequence());
     }
 
@@ -228,6 +246,20 @@ public class HawkeyeController : MonoBehaviour
         isKicking = false;  // Reset isKicking state
         ShortcardScript.useCard(); // Call useCard() method
 
+    }
+
+    public void slashAttack(GameObject slash, float damageRadius, int damage)
+    {
+        Debug.Log("slash Used");
+        Instantiate(slash, slashSpawnPoint.position, transform.rotation);
+    }
+
+    public void rangedAttack(float speed, int damage, int range)
+    {
+        Debug.Log("rangeed special attack Used");
+        arrowDamage = damage;
+        arrowRange = range;
+        // Instantiate(slash, slashSpawnPoint.position, transform.rotation);
     }
 }
 
