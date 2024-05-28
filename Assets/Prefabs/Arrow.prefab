@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -3970843639162269905}
   - component: {fileID: 8541234969393870776}
   - component: {fileID: 3894974659723431308}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,10 +106,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.68
-  m_Height: 0.4133147
+  m_Radius: 1.7
+  m_Height: 2.24
   m_Direction: 1
-  m_Center: {x: 0, y: 0.99, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &-3970843639162269905
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,6 +145,10 @@ MonoBehaviour:
   shot: 0
   speed: 0.2
   timeSpan: 5
+  arrowVFXPrefab: {fileID: 919132149155446097, guid: f2b9f5a75cdb5084c9444c274c1e7ebf, type: 3}
+  rangedSpecialAttack: 0
+  damage: 0
+  range: 0
 --- !u!114 &3894974659723431308
 MonoBehaviour:
   m_ObjectHideFlags: 0

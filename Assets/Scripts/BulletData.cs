@@ -58,6 +58,7 @@ public class BulletData : NetworkBehaviour
     
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("Collided");
         if (IsServer)
         {
             if (collision.transform.TryGetComponent(out NetworkObject networkObject))

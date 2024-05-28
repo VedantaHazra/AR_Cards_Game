@@ -6,7 +6,7 @@ using Unity.Netcode;
 
 public class NetworkPlayerMovement : NetworkBehaviour
 {
-   private GameObject arrow;
+   //private GameObject arrow;
     private Player playerInput;
     private CharacterController controller;
     private Vector3 playerVelocity;
@@ -38,7 +38,7 @@ public class NetworkPlayerMovement : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         
-        if(IsOwner)
+        if(GetComponent<NetworkObject>().IsOwner)
         {
             Debug.Log(IsOwner);
             isOwner = true;
@@ -53,7 +53,7 @@ public class NetworkPlayerMovement : NetworkBehaviour
     }
     public override void OnNetworkDespawn()
     {
-        if(IsOwner)
+        if(GetComponent<NetworkObject>().IsOwner)
         {
         playerInput.PlayerMain.Aim.started -= OnAimStarted;
         playerInput.PlayerMain.Shoot.started -= OnShootStarted;
@@ -86,6 +86,7 @@ public class NetworkPlayerMovement : NetworkBehaviour
 
     void Update()
     {
+        if(!GetComponent<NetworkObject>().IsOwner) {return;}
         groundedPlayer = controller.isGrounded;
 
         if (groundedPlayer && playerVelocity.y < 0)
@@ -167,8 +168,8 @@ public class NetworkPlayerMovement : NetworkBehaviour
     private void OnAimStarted(InputAction.CallbackContext context)
     {
         isAiming = true;
-        arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation, arrowSpawnPoint);
-        StartBulletServerRpc(NetworkManager.Singleton.LocalClientId);
+        //arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation, arrowSpawnPoint);
+        //StartBulletServerRpc(NetworkManager.Singleton.LocalClientId);
         StartCoroutine(HandleAimingSequence());
     }
 
@@ -218,9 +219,9 @@ public class NetworkPlayerMovement : NetworkBehaviour
 
     private void ShootArrow()
     {
-        
-        ArrowScript arrowScript = arrow.GetComponent<ArrowScript>();
-        arrowScript.Shot(arrowReleasePoint.position - arrowSpawnPoint.position);
+        StartBulletServerRpc(NetworkManager.Singleton.LocalClientId);
+        //ArrowScript arrowScript = arrow.GetComponent<ArrowScript>();
+        //arrowScript.Shot(arrowReleasePoint.position - arrowSpawnPoint.position);
 
         
         //Rigidbody rb = arrow.GetComponent<Rigidbody>();
@@ -231,10 +232,13 @@ public class NetworkPlayerMovement : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     void StartBulletServerRpc(ulong clientID)
     {
+        GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, arrowSpawnPoint.rotation, arrowSpawnPoint);
         NetworkObject arrowNetworkObject = arrow.GetComponent<NetworkObject>();
         
         arrowNetworkObject.Spawn();
-        arrow.GetComponent<ArrowScript>().SetOwnershipServerRpc(NetworkManager.Singleton.LocalClientId);
+        arrow.GetComponent<ArrowScript>().SetOwnershipServerRpc(clientID);
+        ArrowScript arrowScript = arrow.GetComponent<ArrowScript>();
+        arrowScript.Shot(arrowReleasePoint.position - arrowSpawnPoint.position);
         
     }
 

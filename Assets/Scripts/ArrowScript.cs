@@ -42,19 +42,23 @@ public class ArrowScript : NetworkBehaviour
     {
         if(!shot) { return; }
 
-        Vector3 position = transform.position + vector*speed;
-        transform.position = position;
+        MoveServerRpc();
         time += Time.deltaTime;
         // if(time > timeSpan) {
         //     Destroy(gameObject);
         // }
 
     }
+    [ServerRpc(RequireOwnership = false)]
+    void MoveServerRpc(){
+        Vector3 position = transform.position + vector*speed;
+        transform.position = position;
+    }
     public void Shot(Vector3 vect)
     {
         shot = true;
         vector = vect;
-        transform.SetParent(null);
+        //transform.SetParent(null);
         DeactivateSelfDelay();
     }
 
@@ -101,16 +105,18 @@ public class ArrowScript : NetworkBehaviour
         SetBulletIsActiveServerRpc(false);
     }
     
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
         if (IsServer)
         {
-            if (collision.transform.TryGetComponent(out NetworkObject networkObject))
+
+            if (other.transform.parent.TryGetComponent(out NetworkObject networkObject))
             {
-                if (collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+                if (other.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
-                    Debug.Log("Bullet has Collision to player");
+                    
                     (ulong, ulong) fromShooterToHit = new(owner.Value, networkObject.OwnerClientId);
+                    Debug.Log("Bullet has Collision to player"+fromShooterToHit);
                     OnHitPlayer?.Invoke(fromShooterToHit);
                     SetBulletIsActiveServerRpc(false);
                     return;

@@ -72,7 +72,7 @@ public class AllPlayerDataManager : NetworkBehaviour
     void Start()
     {
         NetworkManager.Singleton.OnClientConnectedCallback += AddNewClientToList;
-        // BulletData.OnHitPlayer += BulletDataOnOnHitPlayer;
+        ArrowScript.OnHitPlayer += BulletDataOnOnHitPlayer;
         KillPlayer.OnKillPlayer += KillPlayerOnOnKillPlayer;
         RestartGame.OnRestartGame += RestartGameOnOnRestartGame;
     }
@@ -80,7 +80,7 @@ public class AllPlayerDataManager : NetworkBehaviour
     public override void OnNetworkDespawn()
     {
         NetworkManager.Singleton.OnClientConnectedCallback -= AddNewClientToList;
-        // BulletData.OnHitPlayer -= BulletDataOnOnHitPlayer;
+        ArrowScript.OnHitPlayer -= BulletDataOnOnHitPlayer;
         KillPlayer.OnKillPlayer -= KillPlayerOnOnKillPlayer;
         RestartGame.OnRestartGame -= RestartGameOnOnRestartGame;
     }
@@ -103,10 +103,10 @@ public class AllPlayerDataManager : NetworkBehaviour
            playerobj.Despawn(); 
         }
 
-        // foreach (var bulletObject in bulletObjects)
-        // {
-        //     bulletObject.Despawn();
-        // }
+        foreach (var bulletObject in bulletObjects)
+        {
+            bulletObject.Despawn();
+        }
 
         ResetNetworkList();
     }
@@ -148,10 +148,12 @@ public class AllPlayerDataManager : NetworkBehaviour
 
     private void BulletDataOnOnHitPlayer((ulong from, ulong to) ids)
     {
+        Debug.Log("Hit....");
         if (IsServer)
         {
             if (ids.from != ids.to)
             {
+                Debug.Log("Player Health reduce");
                 for (int i = 0; i < allPlayerData.Count; i++)
                 {
                     if (allPlayerData[i].clientID == ids.to)
