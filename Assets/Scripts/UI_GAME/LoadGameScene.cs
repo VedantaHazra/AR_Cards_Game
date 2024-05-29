@@ -20,8 +20,8 @@ public class LoadGameScene : MonoBehaviour
         }
 
 
-        GameObject startGameARObject = FindObjectOfType<StartGameAR>().gameObject;
-        Destroy(startGameARObject);
+        //GameObject startGameARObject = FindObjectOfType<StartGameAR>().gameObject;
+        //Destroy(startGameARObject);
         
         Destroy(FindObjectOfType<NetworkManager>().transform.gameObject);
         SceneManager.LoadScene("Vedanta", LoadSceneMode.Single);

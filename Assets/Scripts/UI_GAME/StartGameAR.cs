@@ -36,13 +36,13 @@ public class StartGameAR : MonoBehaviour
         
         StartGameButton.interactable = false;
         
-        //BlitImageForColocalization.OnTextureRendered += BlitImageForColocalizationOnTextureRendered;
+        BlitImageForColocalization.OnTextureRendered += BlitImageForColocalizationOnTextureRendered;
     }
 
     private void OnDestroy()
     {
         _sharedSpaceManager.sharedSpaceManagerStateChanged -= SharedSpaceManagerOnsharedSpaceManagerStateChanged;
-        //BlitImageForColocalization.OnTextureRendered -= BlitImageForColocalizationOnTextureRendered;
+        BlitImageForColocalization.OnTextureRendered -= BlitImageForColocalizationOnTextureRendered;
     }
 
     private void BlitImageForColocalizationOnTextureRendered(Texture2D texture)

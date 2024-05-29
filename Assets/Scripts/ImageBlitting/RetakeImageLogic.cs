@@ -17,6 +17,6 @@ public class RetakeImageLogic : MonoBehaviour
 
     void QuitGameToRetakeImage()
     {
-        SceneManager.LoadScene("LoadScene", LoadSceneMode.Single);
+        SceneManager.LoadScene("Vedanta", LoadSceneMode.Single);
     }
 }
