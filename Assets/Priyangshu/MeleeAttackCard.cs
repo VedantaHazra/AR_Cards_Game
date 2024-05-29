@@ -6,7 +6,14 @@ using UnityEngine;
 public class MeleeAttackCard : Card
 {
     public int damageRadius;
+<<<<<<< Updated upstream
     public string AttackName;
+=======
+    // public string AttackName;
+
+    public GameObject slash;
+
+>>>>>>> Stashed changes
     // public int speed;
 
     public void Attack()

@@ -21,6 +21,20 @@ public class CardHandler : MonoBehaviour
         width = GetComponent<RectTransform>().rect.width;
         height = GetComponent<RectTransform>().rect.height;
         player = GameObject.Find("Player");
+<<<<<<< Updated upstream
+=======
+
+        
+        for(int i = 0; i < cardType.Length; i++)
+        {
+            cardType[i].isPossessed = false;
+        }
+
+        addRandomCard();
+        addRandomCard();
+        addRandomCard();
+        
+>>>>>>> Stashed changes
     }
 
     // Update is called once per frame
@@ -38,9 +52,10 @@ public class CardHandler : MonoBehaviour
         newCard.GetComponent<RectTransform>().anchorMin = new Vector2(1, 1);
         newCard.GetComponent<RectTransform>().anchorMax = new Vector2(1, 1);
         newCard.GetComponent<RectTransform>().localPosition = new Vector3( -150f - ((cards.Count-1)*300) + width/2, -50f + height/2, 0f);
-
+        
         //set card type
         newCard.GetComponent<cardScript>().card = cardType[Random.Range(0, cardType.Length)];
+        newCard.GetComponent<cardScript>().card.isPossessed = true;
     }
 
     public void removeCard(GameObject card)

@@ -11,10 +11,14 @@ public class Card : ScriptableObject
     public Sprite artwork;
 
     public int level;
+    public string card_id;
+
     // public int cost;
 
     public int damage;
     public int cooldownTime;
+
+    public bool isPossessed;
 
     public virtual void upgradeCard()
     {

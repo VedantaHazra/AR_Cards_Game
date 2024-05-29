@@ -16,7 +16,13 @@ MonoBehaviour:
   type: melee
   artwork: {fileID: 21300000, guid: c7fed0d5a3d14db43aa5428f4e47628e, type: 3}
   level: 1
+  card_id: 
   damage: 30
   cooldownTime: 6
+  isPossessed: 1
   damageRadius: 12
+<<<<<<< Updated upstream
   AttackName: kick2
+=======
+  slash: {fileID: 8855159301211159877, guid: 03cf52a1c8dbcde47b3da36308e4a541, type: 3}
+>>>>>>> Stashed changes

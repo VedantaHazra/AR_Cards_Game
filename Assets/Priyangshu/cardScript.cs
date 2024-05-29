@@ -21,6 +21,8 @@ public class cardScript : MonoBehaviour
 
     public GameObject cardImage;
 
+    public UI_Manager uiManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -70,5 +72,12 @@ public class cardScript : MonoBehaviour
         button.GetComponent<Button>().interactable = true;
         Debug.Log("Cooldown Ended");
         // GetComponent<UnityEngine.UI.Button>().interactable = true;
+    }
+
+    public void sellCard(){
+        Debug.Log("Card Sold");
+        uiManager.sellCard(card);
+        // card.isPossessed = false;
+        Destroy(gameObject);
     }
 }

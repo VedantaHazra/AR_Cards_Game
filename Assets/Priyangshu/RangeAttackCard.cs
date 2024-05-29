@@ -8,7 +8,13 @@ public class RangeAttackCard : Card
     public int range;
     public int speed;
 
+<<<<<<< Updated upstream
     public string AttackName;
+=======
+    public GameObject projectile;
+
+    // public string AttackName;
+>>>>>>> Stashed changes
 
     public void Attack()
     {
