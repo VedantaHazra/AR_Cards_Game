@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 
-public class SlashScript : MonoBehaviour
+public class SlashScript : NetworkBehaviour
 {
     
     public float speedScale;
@@ -25,7 +26,14 @@ public class SlashScript : MonoBehaviour
 
         if(Time.time  - startTime > 2.2f)
         {
+            DespawnServerRpc();
+            
             Destroy(gameObject);
         }
+    }
+    [ServerRpc(RequireOwnership = false)]
+    void DespawnServerRpc()
+    {
+        gameObject.GetComponent<NetworkObject>().Despawn();
     }
 }

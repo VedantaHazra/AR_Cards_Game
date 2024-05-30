@@ -6,7 +6,11 @@ using Unity.Netcode;
 
 public class NetworkPlayerMovement : NetworkBehaviour
 {
-   //private GameObject arrow;
+  // private GameObject arrow;
+  public GameObject kickSlash;
+  public GameObject InputUI;
+    float arrowDamage;
+    int arrowRange;
     private Player playerInput;
     private CharacterController controller;
     private Vector3 playerVelocity;
@@ -29,10 +33,21 @@ public class NetworkPlayerMovement : NetworkBehaviour
     private float rotationSpeed = 4f;
     [SerializeField]
     private GameObject arrowPrefab;  // Prefab for the arrow
+
+    public bool rangedSpecialAttack;
+
     [SerializeField]
     private Transform arrowSpawnPoint;  // Position to instantiate the arrow
     [SerializeField]
     private Transform arrowReleasePoint;
+
+    [SerializeField]
+    private cardScript LongcardScript; // Reference to cardScript
+    [SerializeField]
+    private cardScript ShortcardScript; // Reference to cardScript
+
+    [SerializeField]
+    Transform slashSpawnPoint;
     private bool isOwner;
 
     public override void OnNetworkSpawn()
@@ -40,16 +55,23 @@ public class NetworkPlayerMovement : NetworkBehaviour
         
         if(GetComponent<NetworkObject>().IsOwner)
         {
+            InputUI.SetActive(true);
             Debug.Log(IsOwner);
             isOwner = true;
             
         playerInput.PlayerMain.Aim.started += OnAimStarted;
         playerInput.PlayerMain.Shoot.started += OnShootStarted;
         playerInput.PlayerMain.Kick.started += OnKickStarted;
+        SetOwnerIDToDamageGiverServerRpc(NetworkManager.Singleton.LocalClientId);
         }
         else{
             isOwner = false;
         }
+    }
+    [ServerRpc]
+    void SetOwnerIDToDamageGiverServerRpc(ulong clientID)
+    {
+        gameObject.GetComponentInChildren<GiveDamageScript>().SetOwnershipServerRpc(clientID);
     }
     public override void OnNetworkDespawn()
     {
@@ -65,6 +87,7 @@ public class NetworkPlayerMovement : NetworkBehaviour
         playerInput = new Player();
         controller = GetComponent<CharacterController>();
         animator = GetComponentInChildren<Animator>();
+        rangedSpecialAttack = false;
 
     }
 
@@ -239,6 +262,11 @@ public class NetworkPlayerMovement : NetworkBehaviour
         arrow.GetComponent<ArrowScript>().SetOwnershipServerRpc(clientID);
         ArrowScript arrowScript = arrow.GetComponent<ArrowScript>();
         arrowScript.Shot(arrowReleasePoint.position - arrowSpawnPoint.position);
+        if(rangedSpecialAttack){
+            arrowScript.rangedSpecialAttack = true;
+            arrowScript.damage = arrowDamage;
+            arrowScript.range = arrowRange;
+        }
         
     }
 
@@ -263,6 +291,34 @@ public class NetworkPlayerMovement : NetworkBehaviour
         animator.SetBool("isIdle", true);
 
         isKicking = false;  // Reset isKicking state
+        ShortcardScript.useCard(); // Call useCard() method
+    }
+    public void slashAttack(GameObject slash, float damageRadius, int damage)
+    {
+        
+        
+            StartSlashServerRpc();
+        
+        
+    }
+    [ServerRpc]
+    void StartSlashServerRpc()
+    {
+        Debug.Log("slash Used");
+        GameObject myKickSlash = Instantiate(kickSlash, slashSpawnPoint.position, transform.rotation);
+        myKickSlash.GetComponent<NetworkObject>().Spawn();
+    }
+
+    public void rangedAttack(float speed, int damage, int range)
+    {
+        Debug.Log("rangeed special attack Used");
+        arrowDamage = damage;
+        arrowRange = range;
+        if(isOwner){
+            StartSlashServerRpc();
+        }
+        
+        // Instantiate(slash, slashSpawnPoint.position, transform.rotation);
     }
 }
 

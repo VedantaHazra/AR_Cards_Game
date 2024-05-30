@@ -7,7 +7,7 @@ using UnityEngine;
 public class GameUIManager : NetworkBehaviour
 {
     [SerializeField] private Canvas CreateGameCanvas;
-    [SerializeField] private Canvas ControllerCanvas;
+   // [SerializeField] private Canvas ControllerCanvas;
     [SerializeField] private Canvas RestartQuitCanvas;
 
 
@@ -33,7 +33,7 @@ public class GameUIManager : NetworkBehaviour
     void ShowPlayerControlsClientRpc()
     {
         CreateGameCanvas.gameObject.SetActive(false);
-        ControllerCanvas.gameObject.SetActive(true);
+        //ControllerCanvas.gameObject.SetActive(true);
         RestartQuitCanvas.gameObject.SetActive(false);
     }
 
@@ -49,7 +49,7 @@ public class GameUIManager : NetworkBehaviour
     void PlayerIsDeadClientRpc()
     {
         CreateGameCanvas.gameObject.SetActive(false);
-        ControllerCanvas.gameObject.SetActive(false);
+        //ControllerCanvas.gameObject.SetActive(false);
         RestartQuitCanvas.gameObject.SetActive(true);
     }
 
@@ -57,14 +57,14 @@ public class GameUIManager : NetworkBehaviour
     void ShowCreateGameCanvas()
     {
         CreateGameCanvas.gameObject.SetActive(true);
-        ControllerCanvas.gameObject.SetActive(false);
+       // ControllerCanvas.gameObject.SetActive(false);
         RestartQuitCanvas.gameObject.SetActive(false);
     }
 
     public override void OnNetworkSpawn()
     {
         CreateGameCanvas.gameObject.SetActive(false);
-        ControllerCanvas.gameObject.SetActive(true);
+       // ControllerCanvas.gameObject.SetActive(true);
         RestartQuitCanvas.gameObject.SetActive(false);
     }
 

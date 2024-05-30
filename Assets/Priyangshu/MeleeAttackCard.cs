@@ -33,9 +33,21 @@ public class MeleeAttackCard : Card
         Debug.Log("Melee Card Used");
         // do animations on player
         this.player = GameObject.Find("Hawkeye");
-        // Debug.Log("Player: " + player);
-        HawkeyeController HC = player.GetComponent<HawkeyeController>();
+        if(player == null)
+        {
+            this.player = GameObject.Find("Player 1(Clone)");
+        }
         Debug.Log("Player: " + player);
-        HC.slashAttack(slash, damageRadius, damage);
+        HawkeyeController HC = player.GetComponent<HawkeyeController>();
+        if(HC != null)
+        {
+            HC.slashAttack(slash, damageRadius, damage);
+        }
+        else{
+            NetworkPlayerMovement PC = player.GetComponent<NetworkPlayerMovement>();
+            PC.slashAttack(slash, damageRadius, damage);
+        }
+        Debug.Log("Player: " + player);
+        
     }
 }
