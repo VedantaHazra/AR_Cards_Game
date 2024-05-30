@@ -39,7 +39,7 @@ public class ThorNetworkController : NetworkBehaviour
             InputUI.SetActive(true);
             Debug.Log(IsOwner);
             isOwner = true;
-        playerInput = new Player();
+       
         playerInput.ThorMain.Attack.started += OnAttackStarted;
         playerInput.ThorMain.Shoot.started += OnShootStarted;
         SetOwnerIDToDamageGiverServerRpc(NetworkManager.Singleton.LocalClientId);
@@ -62,7 +62,7 @@ public class ThorNetworkController : NetworkBehaviour
         }
     }
     private void Awake()
-    {
+    { playerInput = new Player();
         controller = GetComponent<CharacterController>();
         animator = GetComponentInChildren<Animator>();
 
@@ -85,7 +85,7 @@ public class ThorNetworkController : NetworkBehaviour
 
     void Update()
     {
-        if(!isOwner) { return; }
+        if(!GetComponent<NetworkObject>().IsOwner) {return;}
         groundedPlayer = controller.isGrounded;
 
         if (groundedPlayer && playerVelocity.y < 0)

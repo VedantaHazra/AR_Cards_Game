@@ -91,7 +91,7 @@ public class NetworkPlayerMovement : NetworkBehaviour
 
     }
 
-   private void OnEnable()
+    private void OnEnable()
     {
         playerInput.Enable();
     }
