@@ -14,7 +14,6 @@ public class ThorController : MonoBehaviour
     private bool isAttacking;  // Track if attack animation is playing
     private bool isAttackingShort;  // Track if attack animation is playing
 
-
     [SerializeField]
     private Transform cameraMain;
     [SerializeField]
@@ -25,6 +24,8 @@ public class ThorController : MonoBehaviour
     private float gravityValue = -9.81f;
     [SerializeField]
     private float rotationSpeed = 4f;
+    [SerializeField]
+    private float attackMoveSpeed = 5f; // Speed at which the character moves during the attack
 
     private void Awake()
     {
@@ -76,7 +77,6 @@ public class ThorController : MonoBehaviour
 
         if (playerInput.PlayerMain.Jump.WasPressedThisFrame() && groundedPlayer)
         {
-            // playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
             animator.SetBool("isJumping", true);
             animator.SetBool("isIdle", false);
         }
@@ -132,42 +132,40 @@ public class ThorController : MonoBehaviour
         animator.SetBool("isThortacking", true);
         animator.SetBool("isRecharging", false);
 
+        float attackDuration = 1.46f; // Adjust to the duration of the attack animation
+        float elapsedTime = 0f;
 
-        // Wait for the actual attack animation duration
-        yield return new WaitForSeconds(0.8f); // Adjust to the duration of the attack animation
+        // Move the character forward during the attack animation
+        while (elapsedTime < attackDuration)
+        {
+            controller.Move(transform.forward * attackMoveSpeed * Time.deltaTime);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
 
         // Reset the attacking state
         animator.SetBool("isThortacking", false);
         animator.SetBool("isIdle", true);
         isAttacking = false;
     }
+
     private void OnShootStarted(InputAction.CallbackContext context)
     {
         if (!isAttackingShort)
         {
             isAttackingShort = true;
             StartCoroutine(HandleShortAttackSequence());
-
-
-
-
         }
     }
+
     private IEnumerator HandleShortAttackSequence()
     {
         animator.SetBool("isIdle", false);
-
         animator.SetBool("isAttackingShort", true);
-        yield return new WaitForSeconds(2.15f);
+        yield return new WaitForSeconds(2.15f); // Adjust to the duration of the short attack animation
 
         animator.SetBool("isAttackingShort", false);
         animator.SetBool("isIdle", true);
-
-
         isAttackingShort = false;
-
-
-
     }
-
 }
