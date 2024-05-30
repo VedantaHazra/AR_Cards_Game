@@ -453,7 +453,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &241928941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -471,6 +471,7 @@ MonoBehaviour:
   jumpHeight: 1
   gravityValue: -9.81
   rotationSpeed: 4
+  attackMoveSpeed: 5
 --- !u!143 &241928942
 CharacterController:
   m_ObjectHideFlags: 0
@@ -496,7 +497,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: -0.19, z: 0}
+  m_Center: {x: 0, y: -0.28, z: 0}
 --- !u!4 &241928943
 Transform:
   m_ObjectHideFlags: 0
@@ -1072,6 +1073,7 @@ GameObject:
   m_Component:
   - component: {fileID: 705507995}
   - component: {fileID: 705507994}
+  - component: {fileID: 705507996}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -1156,6 +1158,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &705507996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 705507993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!224 &725114890 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 224771122883764374, guid: 05f32eddd3e41fd4597ada617b785928, type: 3}
@@ -2152,7 +2177,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1670158291
 Transform:
   m_ObjectHideFlags: 0
@@ -2189,8 +2214,12 @@ MonoBehaviour:
   gravityValue: -9.81
   rotationSpeed: 4
   arrowPrefab: {fileID: 1085082311}
+  rangedSpecialAttack: 0
   arrowSpawnPoint: {fileID: 1661720900}
   arrowReleasePoint: {fileID: 1303216144}
+  LongcardScript: {fileID: 0}
+  ShortcardScript: {fileID: 0}
+  slashSpawnPoint: {fileID: 0}
 --- !u!143 &1670158293
 CharacterController:
   m_ObjectHideFlags: 0
@@ -4980,6 +5009,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3970843639162269905, guid: aa3d8ac18f3a34547ba86aef191379ec, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 861105989
+      objectReference: {fileID: 0}
     - target: {fileID: 1107641167158021759, guid: aa3d8ac18f3a34547ba86aef191379ec, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.987
