@@ -7,7 +7,8 @@ using UnityEngine.EventSystems;
 
 public class PlaceCharacter : NetworkBehaviour
 {
-    [SerializeField] private GameObject placementObject;
+    [SerializeField] private GameObject hawkeye;
+    [SerializeField] private GameObject thor;
     [SerializeField] private float placeHeight;
     
 
@@ -89,11 +90,21 @@ public class PlaceCharacter : NetworkBehaviour
     void SpawnPlayerServerRpc(Vector3 positon, Quaternion rotation, ulong callerID)
     {
         positon.y += 2f;
+        GameObject placementObject;
+        if(callerID == 0)
+        {
+            placementObject = hawkeye;
+        }
+        else{
+            placementObject = thor;
+        }
+        
         GameObject character = Instantiate(placementObject, positon, rotation);
 
         NetworkObject characterNetworkObject = character.GetComponent<NetworkObject>();
             
         characterNetworkObject.SpawnWithOwnership(callerID);
+        Debug.Log(callerID);
         
         AllPlayerDataManager.Instance.AddPlacedPlayer(callerID);
     }

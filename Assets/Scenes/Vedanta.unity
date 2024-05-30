@@ -706,7 +706,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75f3d1382764845329742d77895d4c6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placementObject: {fileID: 7228476667154977803, guid: c976f9b6e6aca4d71ba5d1f35a56745d, type: 3}
+  hawkeye: {fileID: 7228476667154977803, guid: c976f9b6e6aca4d71ba5d1f35a56745d, type: 3}
+  thor: {fileID: 8961200827920335284, guid: 325ef863e6b454bf18e83d2fc66a0b41, type: 3}
   placeHeight: 5
 --- !u!4 &380506599
 Transform:
