@@ -28,7 +28,7 @@ public class AllPlayerDataManager : NetworkBehaviour
         Instance = this;
         
     }
-    
+
     public void AddPlacedPlayer(ulong id)
     {
         for (int i = 0; i < allPlayerData.Count; i++)
@@ -100,7 +100,7 @@ public class AllPlayerDataManager : NetworkBehaviour
 
         foreach (var playerobj in playerObjects)
         {
-           playerobj.Despawn(); 
+            playerobj.Despawn(); 
         }
 
         foreach (var bulletObject in bulletObjects)
