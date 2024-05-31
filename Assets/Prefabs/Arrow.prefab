@@ -32,8 +32,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -11.987, y: 1.42, z: -10.81467}
-  m_LocalScale: {x: 0.015000009, y: 0.35000008, z: 0}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.49999997, y: 11.666661, z: 0}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
@@ -122,7 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 95658280
+  GlobalObjectIdHash: 2110753645
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shot: 0
-  speed: 0.2
+  speed: 1
   timeSpan: 5
   arrowVFXPrefab: {fileID: 919132149155446097, guid: f2b9f5a75cdb5084c9444c274c1e7ebf, type: 3}
   rangedSpecialAttack: 0
