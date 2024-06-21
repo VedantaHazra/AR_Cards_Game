@@ -1,11 +1,4 @@
-# AR Cards Game
 
 
-## Video Demonstration
-
-You can watch a demonstration of the project by clicking the link below:
-
-[Watch Video](https://github.com/VedantaHazra/AR_Cards_Game/promotion.mp4)
-
-> **Note:** Click the link above to play or download the video.
+https://github.com/VedantaHazra/AR_Cards_Game/assets/119587231/2584b8e3-c82f-48e9-8c48-1f1eeadd2137
 
